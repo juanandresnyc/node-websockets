@@ -4,7 +4,7 @@ const express = require('express');
 const SocketServer = require('ws').Server;
 const path = require('path');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const INDEX = path.join(__dirname, 'index.html');
 
 const server = express()
@@ -12,20 +12,17 @@ const server = express()
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const wss = new SocketServer({ server });
-
+let ids = 11;
 wss.on('connection', (ws) => {
-  console.log('Client connected');
-
+  ws._ID = ids;
+  ids += 1;
   ws.on('message', function incoming(message) {
     wss.clients.forEach((client) => {
-      client.send(message);
+      console.log('each client', client._ID);
+      if (ws._ID !== client._ID) {
+        client.send(message);
+      }
     });
   });
   ws.on('close', () => console.log('Client disconnected'));
 });
-
-// setInterval(() => {
-//   wss.clients.forEach((client) => {
-//     client.send(new Date().toTimeString());
-//   });
-// }, 1000);
