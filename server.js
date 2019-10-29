@@ -15,8 +15,8 @@ if (process.env.LOCAL_DEV_SSL) {
   const https = require('https');
   const fs = require('fs');
   server = https.createServer({
-    key: fs.readFileSync('__server.key'),
-    cert: fs.readFileSync('__server.cert')
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert')
   }, server)
 }
 
