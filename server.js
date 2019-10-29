@@ -15,8 +15,8 @@ let server = express()
 //   const https = require('https');
 //   const fs = require('fs');
 //   server = https.createServer({
-//     key: fs.readFileSync('server.key'),
-//     cert: fs.readFileSync('server.cert')
+//     key: fs.readFileSync('__server.key'),
+//     cert: fs.readFileSync('__server.cert')
 //   }, server)
 // }
 
