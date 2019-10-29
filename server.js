@@ -10,15 +10,15 @@ const INDEX = path.join(__dirname, 'index.html');
 let server = express()
   .use((req, res) => res.sendFile(INDEX) );
 
-// for dev only
-if (process.env.LOCAL_DEV_SSL) {
-  const https = require('https');
-  const fs = require('fs');
-  server = https.createServer({
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert')
-  }, server)
-}
+// // for dev only
+// if (process.env.LOCAL_DEV_SSL) {
+//   const https = require('https');
+//   const fs = require('fs');
+//   server = https.createServer({
+//     key: fs.readFileSync('server.key'),
+//     cert: fs.readFileSync('server.cert')
+//   }, server)
+// }
 
 server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
