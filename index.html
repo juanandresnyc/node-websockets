@@ -25,7 +25,6 @@
       
 
       ws.onmessage = function (event) {
-        console.log('wut', event);
         const player = createPlayer(event.data);
         if (player) {
           // Update data
@@ -41,6 +40,7 @@
           if (!el) {
             el = document.createElement('li');
             el.setAttribute('id', playerUIID);
+            el.className = 'player';
             PLAYERS_UI_LIST.appendChild(el);
             // entry.appendChild(document.createTextNode(playerText));
           }
@@ -50,21 +50,23 @@
 
       // Remove if ids haven't been refreshed
       setInterval(() => {
-        console.log('cleaning up', PLAYERS);
-        
         const lastUpdated = new Date();
         lastUpdated.setSeconds(lastUpdated.getSeconds() - 5);
         const lastUpdatedISO = lastUpdated.toISOString();
-        
-        for (const player in PLAYERS) {
-          if (player.createdAt < lastUpdatedISO) {
-            const playerUIID = `player-${player.id}`;
-            const el = document.getElementById(playerUIID);
-            if (el) {
-              PLAYERS_UI_LIST.removeChild(el);
+
+        console.log('cleaning up', PLAYERS, lastUpdatedISO);
+
+        const uiPlayers = document.querySelectorAll('.player');
+        uiPlayers.forEach(uiPlayer => {
+          const playerId = uiPlayer.id.replace('player-', '');
+          const player = PLAYERS[playerId];
+          if (player) {
+            console.log('testing', lastUpdatedISO, player);
+            if (player.createdAt < lastUpdatedISO) {
+              PLAYERS_UI_LIST.removeChild(uiPlayer);
             }
           }
-        }
+        });
       }, 10000);
     </script>
   </body>
