@@ -42,7 +42,6 @@
             el.setAttribute('id', playerUIID);
             el.className = 'player';
             PLAYERS_UI_LIST.appendChild(el);
-            // entry.appendChild(document.createTextNode(playerText));
           }
           el.innerText = playerText;
         }
@@ -53,8 +52,6 @@
         const lastUpdated = new Date();
         lastUpdated.setSeconds(lastUpdated.getSeconds() - 5);
         const lastUpdatedISO = lastUpdated.toISOString();
-
-        console.log('cleaning up', PLAYERS, lastUpdatedISO);
 
         const uiPlayers = document.querySelectorAll('.player');
         uiPlayers.forEach(uiPlayer => {
