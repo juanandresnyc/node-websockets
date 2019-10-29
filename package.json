@@ -13,9 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bufferutil": "1.2.1",
     "express": "4.13.4",
-    "utf-8-validate": "1.2.1",
+    "https": "^1.0.0",
     "ws": "1.1.0"
   }
 }

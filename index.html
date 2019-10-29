@@ -1,15 +1,71 @@
 <html>
   <body>
-    <p id='server-time'></p>
+    <h2>Players list</h2>
+    <ul id="players"></ul>
     <script>
       var HOST = location.origin.replace(/^http/, 'ws')
-      console.log('WUT', HOST);
       var ws = new WebSocket(HOST);
-      var el = document.getElementById('server-time');
+      var PLAYERS_UI_LIST = document.getElementById('players');
+
+      let PLAYERS = {};
+
+      function createPlayer(data) {
+        try {
+          const player = JSON.parse(data);
+          if (player.id) {
+            return {
+              ...player,
+              createdAt: (new Date()).toISOString(),
+            };
+          }
+        } catch (e) {
+          console.log('unable to create player', data, e);
+        }
+      }
+      
 
       ws.onmessage = function (event) {
-        el.innerHTML = 'Server time: ' + event.data;
+        console.log('wut', event);
+        const player = createPlayer(event.data);
+        if (player) {
+          // Update data
+          PLAYERS = {
+            ...PLAYERS,
+            [player.id]: player,
+          }
+
+          // Update UI
+          const playerUIID = `player-${player.id}`;
+          const playerText = `${player.id}: [${player.i}, ${player.j}]`;
+          let el = document.getElementById(playerUIID);
+          if (!el) {
+            el = document.createElement('li');
+            el.setAttribute('id', playerUIID);
+            PLAYERS_UI_LIST.appendChild(el);
+            // entry.appendChild(document.createTextNode(playerText));
+          }
+          el.innerText = playerText;
+        }
       };
+
+      // Remove if ids haven't been refreshed
+      setInterval(() => {
+        console.log('cleaning up', PLAYERS);
+        
+        const lastUpdated = new Date();
+        lastUpdated.setSeconds(lastUpdated.getSeconds() - 5);
+        const lastUpdatedISO = lastUpdated.toISOString();
+        
+        for (const player in PLAYERS) {
+          if (player.createdAt < lastUpdatedISO) {
+            const playerUIID = `player-${player.id}`;
+            const el = document.getElementById(playerUIID);
+            if (el) {
+              PLAYERS_UI_LIST.removeChild(el);
+            }
+          }
+        }
+      }, 10000);
     </script>
   </body>
 </html>
