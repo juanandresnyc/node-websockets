@@ -7,8 +7,9 @@ const path = require('path');
 const PORT = process.env.PORT || 3001;
 const INDEX = path.join(__dirname, 'index.html');
 
-let server = express()
-  .use((req, res) => res.sendFile(INDEX) );
+const server = express()
+  .use((req, res) => res.sendFile(INDEX) )
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 // // for dev only
 // if (process.env.LOCAL_DEV_SSL) {
@@ -20,15 +21,13 @@ let server = express()
 //   }, server)
 // }
 
-server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+const wss = new SocketServer({ server });
 
 // TODO Support accounts!
-let ids = 11;
-
-const wss = new SocketServer({ server });
+let NEXT_ID = 11;
 wss.on('connection', (ws) => {
-  ws._ID = ids;
-  ids += 1;
+  ws._ID = NEXT_ID;
+  NEXT_ID += 1;
   console.log('new client connected', ws._ID);
   ws.on('message', function incoming(message) {
     wss.clients.forEach((client) => {

@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 server.cert
 server.key
+package-lock.json
